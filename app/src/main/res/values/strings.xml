@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">8-BIT</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="google_map_api_key">AIzaSyCSsPVndHB1BZOlfVBVfF3dZH0UMRDkBes</string>
+</resources>
