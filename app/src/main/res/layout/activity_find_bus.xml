@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.FindBus">
+
+
+    <TextView
+        android:id="@+id/tv_searchBus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="67dp"
+        android:layout_marginEnd="67dp"
+        android:layout_marginBottom="600dp"
+        android:gravity="center"
+        android:text="Search Buses"
+        android:textSize="26sp" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/actv_enterSource"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="500dp"
+        android:hint="Enter Source"
+        android:textSize="20sp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/actv_enterDestination"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="430dp"
+        android:hint="Enter Destination"
+        android:textSize="20sp" />
+
+
+    <Button
+        android:id="@+id/bt_submitSearchBus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="157dp"
+        android:layout_marginEnd="157dp"
+        android:layout_marginBottom="370dp"
+        android:text="Find" />
+
+    <ProgressBar
+        android:id="@+id/pgb_findBus"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="250dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="375dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tv_busesNum"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="160dp"
+        android:scrollbars="vertical"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_busesStops"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="210dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="160dp"
+        android:scrollbars="vertical"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/bt_viewOnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="135dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="100dp"
+        android:text="View On Map" />
+
+</RelativeLayout>

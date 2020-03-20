@@ -64,6 +64,11 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -79,43 +84,58 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import static com.finalyear.login.ui.StartActivity.exitConstant;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapsActivity";
+    private static final int LOCATION_UPDATE_INTERVAL = 1000;
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private int count;
+
     private MapView mMapView;
+    private TextView mEnterDestination;
+
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
-    private ArrayList<ConductorLocationBus> conductorLocationBus = new ArrayList<>();
     private GoogleMap mGoogleMap;
     private LatLngBounds mMapBoundry;
+    private UserLocation mUserPosition;
+    private DatabaseReference countdatabase;
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable;
+
+    private ArrayList<ConductorLocationBus> conductorLocationBus = new ArrayList<>();
     private Map<String,GeoPoint> busLocations = new HashMap<>();
     private Map<String,Integer> busColor = new HashMap<>();
     private Map<String,Integer> busCount = new HashMap<>();
     private Map<String,Marker> markers = new HashMap<>();
     private HashMap<String,String> markerID = new HashMap<>();
-    private UserLocation mUserPosition;
-    private DatabaseReference countdatabase;
-    private int count;
-    private Handler mHandler = new Handler();
-    private Runnable mRunnable;
     private Map<String,Location> prevLocation = new HashMap<>();
     private Map<String,Location> currLocation = new HashMap<>();
     private Map<String,Float> locationBearing = new HashMap<>();
     private Map<String,Duration> markerDuration = new HashMap<>();
-    private static final int LOCATION_UPDATE_INTERVAL = 1000;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        mEnterDestination = findViewById(R.id.tv_enterDestination);
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         countdatabase = FirebaseDatabase.getInstance().getReference();
+
+        mEnterDestination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),FindBus.class));
+            }
+        });
 
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -628,10 +648,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapView.onSaveInstanceState(mapViewBundle);
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
-
         if(exitConstant !=100){
             startActivity(new Intent(getApplicationContext(),StartActivity.class));
         }
