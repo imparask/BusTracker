@@ -87,7 +87,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.finalyear.login.ui.FindBus.filterFlag;
 import static com.finalyear.login.ui.StartActivity.exitConstant;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -131,10 +130,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         fStore = FirebaseFirestore.getInstance();
         countdatabase = FirebaseDatabase.getInstance().getReference();
 
-        if(filterFlag) {
-            Intent intent = getIntent();
-            filterbusNumbers = intent.getStringArrayListExtra("filterBuses");
-        }
+        Intent intent = getIntent();
+        filterbusNumbers = intent.getStringArrayListExtra("filterBuses");
 
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK

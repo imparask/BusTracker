@@ -78,27 +78,34 @@ public class FindBus extends AppCompatActivity {
                 if(!(TextUtils.isEmpty(mEnterSource.getText().toString()) && TextUtils.isEmpty(mEnterDestination.getText().toString()))) {
                     showAvailableBuses();
                 }
+                else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if(availableBuses != null) {
+                        availableBuses.clear();
+                    }
+                    mEnterSource.setError("Enter Source");
+                    mEnterDestination.setError("Enter Destination");
+                }
             }
         });
         mViewOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                filterFlag = false;
-                if(availableBuses.size()!=0){
-                    Object[] availBuses = availableBuses.keySet().toArray();
-                    ArrayList<String> availBusList = new ArrayList<>();
+                ArrayList<String> availBusList = new ArrayList<>();
+                if(availableBuses !=null) {
+                    if (availableBuses.size() != 0) {
+                        Object[] availBuses = availableBuses.keySet().toArray();
 
-                    Log.d(TAG,availBuses.toString());
+                        Log.d(TAG, availBuses.toString());
 
-                    for(int i=0;i<availBuses.length;i++){
-                        availBusList.add(availBuses[i].toString());
+                        for (Object availBus : availBuses) {
+                            availBusList.add(availBus.toString());
+                        }
                     }
-                    Log.d(TAG,availBusList.toString());
-
-                    intent.putStringArrayListExtra("filterBuses", availBusList);
-                    filterFlag=true;
                 }
+                Log.d(TAG,availBusList.toString());
+                intent.putStringArrayListExtra("filterBuses", availBusList);
                 startActivity(intent);
             }
         });
