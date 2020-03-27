@@ -86,6 +86,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.finalyear.login.ui.FindBus.filterFlag;
 import static com.finalyear.login.ui.StartActivity.exitConstant;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -96,7 +98,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int count;
 
     private MapView mMapView;
-    private TextView mEnterDestination;
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
@@ -117,6 +118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Map<String,Location> currLocation = new HashMap<>();
     private Map<String,Float> locationBearing = new HashMap<>();
     private Map<String,Duration> markerDuration = new HashMap<>();
+    private ArrayList<String> filterbusNumbers = new ArrayList<>();
 
 
     @Override
@@ -124,18 +126,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mEnterDestination = findViewById(R.id.tv_enterDestination);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         countdatabase = FirebaseDatabase.getInstance().getReference();
 
-        mEnterDestination.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),FindBus.class));
-            }
-        });
+        if(filterFlag) {
+            Intent intent = getIntent();
+            filterbusNumbers = intent.getStringArrayListExtra("filterBuses");
+        }
 
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -411,6 +410,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (ConductorLocationBus locationBus : conductorLocationBus) {
                     if (locationBus != null) {
                         String refNumber = locationBus.getConductor().getRef_no();
+                        if(filterbusNumbers.size()!=0){
+                            Log.d(TAG,"Filtered Buses : "+filterbusNumbers);
+                            if(!filterbusNumbers.contains(locationBus.getBusNumber())){
+                                continue;
+                            }
+                        }
                         latitude = busLocations.get(refNumber).getLatitude();
                         longitude = busLocations.get(refNumber).getLongitude();
                         color= busColor.get(refNumber);
@@ -418,6 +423,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(locationBearing.get(refNumber)!=null) {
                             bearing = locationBearing.get(refNumber);
                         }
+
                         MarkerOptions m = new MarkerOptions()
                                 .title(locationBus.getBusNumber())
                                 .snippet("Destination : "+locationBus.getBusDestination())
@@ -434,6 +440,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (ConductorLocationBus locationBus : conductorLocationBus) {
                     if (locationBus != null) {
                         String refNumber = locationBus.getConductor().getRef_no();
+                        if(filterbusNumbers.size()!=0){
+                            Log.d(TAG,"Filtered Buses : "+filterbusNumbers);
+                            if(!filterbusNumbers.contains(locationBus.getBusNumber())){
+                                continue;
+                            }
+                        }
                         latitude = busLocations.get(refNumber).getLatitude();
                         longitude = busLocations.get(refNumber).getLongitude();
                         Log.d(TAG,"bus color : "+busColor);
@@ -721,10 +733,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMapView.onLowMemory();
     }
 
+
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        Toast.makeText(getApplicationContext(),"Logout from application",Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
+        //Toast.makeText(getApplicationContext(),"Logout from application",Toast.LENGTH_SHORT).show();
     }
 
 
@@ -732,7 +745,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu,menu);
+        inflater.inflate(R.menu.option_menu_maps,menu);
         return true;
     }
 
@@ -743,6 +756,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(), Login.class));
             finish();
+        }
+        if(item.getItemId()==R.id.viewallbuses){
+            filterbusNumbers.clear();
         }
         return true;
     }

@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getGoogleMap() {
         progressBar.setVisibility(View.INVISIBLE);
-        startActivity( new Intent(getApplicationContext(), MapsActivity.class));
+        startActivity( new Intent(getApplicationContext(), FindBus.class));
     }
 
     private void startLocationService(){

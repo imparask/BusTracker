@@ -9,16 +9,6 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="60dp" />
-
-    <TextView
-        android:id="@+id/tv_enterDestination"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:gravity="center_vertical"
-        android:hint="Enter Destination"
-        android:textSize="24sp" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

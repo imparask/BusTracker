@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -36,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.finalyear.login.ui.StartActivity.exitConstant;
+
 public class FindBus extends AppCompatActivity {
 
     private static final String TAG = "FindBus" ;
@@ -47,6 +50,9 @@ public class FindBus extends AppCompatActivity {
     private ProgressBar progressBar;
     private Map<String,Integer> availableBuses;
     private ProgressDialog progressDialog;
+    public static boolean filterFlag;
+    private Toast backPressedToast;
+    private long backButtonPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,28 @@ public class FindBus extends AppCompatActivity {
                 if(!(TextUtils.isEmpty(mEnterSource.getText().toString()) && TextUtils.isEmpty(mEnterDestination.getText().toString()))) {
                     showAvailableBuses();
                 }
+            }
+        });
+        mViewOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                filterFlag = false;
+                if(availableBuses.size()!=0){
+                    Object[] availBuses = availableBuses.keySet().toArray();
+                    ArrayList<String> availBusList = new ArrayList<>();
+
+                    Log.d(TAG,availBuses.toString());
+
+                    for(int i=0;i<availBuses.length;i++){
+                        availBusList.add(availBuses[i].toString());
+                    }
+                    Log.d(TAG,availBusList.toString());
+
+                    intent.putStringArrayListExtra("filterBuses", availBusList);
+                    filterFlag=true;
+                }
+                startActivity(intent);
             }
         });
     }
@@ -163,9 +191,10 @@ public class FindBus extends AppCompatActivity {
     }
 
     private void displayBuses(){
-
-        mShowBuses.setText("Available Buses : ");
-        mShowBusStops.setText("Number of Stops : ");
+        String text1 = "Available Buses : ";
+        String text2 = "Number of Stops : ";
+        mShowBuses.setText(text1);
+        mShowBusStops.setText(text2);
 
         Object [] busnumbers = availableBuses.keySet().toArray();
 
@@ -178,6 +207,22 @@ public class FindBus extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if(backButtonPressedTime+2000 >= System.currentTimeMillis()){
+            super.onBackPressed();
+            backPressedToast.cancel();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+            finish();
+        }
+        else{
+            backPressedToast = Toast.makeText(this, "Press Back Again to Logout", Toast.LENGTH_SHORT);
+            backPressedToast.show();
+        }
+        backButtonPressedTime = System.currentTimeMillis();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
