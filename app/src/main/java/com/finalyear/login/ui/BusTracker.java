@@ -25,7 +25,7 @@ import javax.xml.datatype.Duration;
 
 public class BusTracker extends AppCompatActivity {
 
-    private TextView mBusNumber,mBusSource,mBusDest,mEta,mPassCount;
+    private TextView mBusNumber,mBusSource,mBusDest,mPassCount;
     private FirebaseFirestore fStore;
 
     @Override
@@ -37,14 +37,13 @@ public class BusTracker extends AppCompatActivity {
         mBusNumber = findViewById(R.id.tv_busNumber);
         mBusSource = findViewById(R.id.tv_busSource);
         mBusDest = findViewById(R.id.tv_busDestination);
-        mEta = findViewById(R.id.tv_busETA);
         mPassCount = findViewById(R.id.tv_busPassengerCount);
 
         Intent intent = getIntent();
         String refNo = intent.getStringExtra("selectedMarker");
         String ETA = intent.getStringExtra("selectedMarkerETA");
         String passengerCount = intent.getStringExtra("passengerCount");
-        mEta.setText(ETA);
+
         mPassCount.setText(passengerCount);
         getMarkerInfo(refNo);
     }

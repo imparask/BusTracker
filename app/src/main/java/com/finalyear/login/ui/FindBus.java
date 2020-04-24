@@ -200,16 +200,37 @@ public class FindBus extends AppCompatActivity {
     private void displayBuses(){
         String text1 = "Available Buses : ";
         String text2 = "Number of Stops : ";
+
         mShowBuses.setText(text1);
         mShowBusStops.setText(text2);
 
+        List<Object> sortedbusnumbers = new ArrayList<>();
+
         Object [] busnumbers = availableBuses.keySet().toArray();
+        Object[] busstops = availableBuses.values().toArray();
+        Arrays.sort(busstops);
 
         Log.d(TAG," Available Buses : "+ Arrays.toString(busnumbers) +"........"+availableBuses.keySet());
 
+        Log.d(TAG," Buses : "+ Arrays.toString(busstops));
+
+        for(int i=0;i<busstops.length;i++){
+            for(int j=0;j<availableBuses.size();j++){
+                if(busstops[i]==availableBuses.get(busnumbers[j].toString())){
+                    if(!(sortedbusnumbers.contains(busnumbers[j]))) {
+                        sortedbusnumbers.add(busnumbers[j]);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        Log.d(TAG," Available Buses : "+ sortedbusnumbers);
+
         for(int i = 1;i<=availableBuses.size();i++) {
-            mShowBuses.append("\n"+i+". "+busnumbers[i-1].toString());
-            mShowBusStops.append("\n"+availableBuses.get(busnumbers[i-1].toString()));
+            mShowBuses.append("\n"+i+". "+sortedbusnumbers.get(i-1).toString());
+            mShowBusStops.append("\n"+availableBuses.get(sortedbusnumbers.get(i-1).toString()));
         }
         progressBar.setVisibility(View.INVISIBLE);
     }
